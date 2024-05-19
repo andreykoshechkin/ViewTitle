@@ -28,7 +28,7 @@ public class CommonServiceView extends VerticalLayout {
 
 
 
-        titleV1 = new Html(titleBuilderV1.commonServicesViewTitle(organizationData, BigDecimal.valueOf(11), BigDecimal.valueOf(151)));
+        titleV1 = new Html(titleBuilderV1.commonServicesViewTitle2(organizationData, BigDecimal.valueOf(11), BigDecimal.valueOf(151)));
         titleV2 = new Html(titleBuilderV2.commonServicesViewTitle(organizationData, BigDecimal.valueOf(11), BigDecimal.valueOf(151)));
 
         add(titleV1, titleV2);

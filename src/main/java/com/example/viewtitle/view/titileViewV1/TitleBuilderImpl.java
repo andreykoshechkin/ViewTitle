@@ -52,7 +52,7 @@ public class TitleBuilderImpl implements TitleBuilder {
         String orgName = "";
         String titleContent = "";
         String requestIdStr = requestId != null ? requestId.toString() : "";
-        String kib = isKib(clientInfo) ? titleBuilder(BLUE, true) : "";
+        String kib = isKib(clientInfo) ? titleBuilder() : "";
 
 
         if (clientInfo != null) {
@@ -77,6 +77,7 @@ public class TitleBuilderImpl implements TitleBuilder {
         String s;
         String inn = "";
         String orgName = "";
+        String kibMarker = isKib(clientInfo) ? titleBuilder(BLUE, true) : "";
 
         if (clientInfo != null) {
             orgName = clientInfo.getCusShortName() != null ? clientInfo.getCusShortName() : clientInfo.getName();
@@ -85,18 +86,17 @@ public class TitleBuilderImpl implements TitleBuilder {
 
 
         if (requestId != null) {
-            s = "Заявка № %requestId% (У). ИНН %inn%.  %orgName%";
+            s = "Заявка № %requestId% (У). ИНН %inn%.  %orgName% %kibMarker%";
         } else {
-            s = "ИНН %inn%. %orgName%";
+            s = "ИНН %inn%. %orgName% %kibMarker%";
         }
 
         String titleContent = s.replace("%requestId% ", requestId != null ? requestId.toString() : "")
                 .replace("%orgName%", orgName == null || orgName.isEmpty() ? "" : orgName)
-                .replace("%inn%", inn.isEmpty() ? "" : inn);
+                .replace("%inn%", inn.isEmpty() ? "" : inn)
+                .replace("%kibMarker%", kibMarker);
 
-        return isKib(clientInfo)
-                ? titleBuilder(BLUE, true)
-                : titleContent;
+        return "<div>" + titleContent + "</div>";
     }
 
     private boolean isKib(OrganizationData organizationData) {
@@ -108,7 +108,7 @@ public class TitleBuilderImpl implements TitleBuilder {
     public enum MarkerColor {
         RED("red"),
         BLUE("blue"),
-        GREEN("greenr"),
+        GREEN("green"),
         MEDIUMSEAGREEN("mediumSeaGreen");
         private final String colorName;
     }
