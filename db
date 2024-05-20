@@ -1,0 +1,94 @@
+Для того чтобы получить имя из таблицы FRONT_DIC_CURIER_SERVICE, которое связано с записью в таблице FRONT_DIC_CURIER
+через внешний ключ, необходимо настроить отношения между этими двумя сущностями в JPA (Java Persistence API).
+В вашем случае вам нужно будет создать две сущности, которые будут связаны через аннотацию @ManyToOne или @OneToMany.
+
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "FRONT_DIC_CURIER")
+public class Courier {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "forgen_key") // имя колонки внешнего ключа
+    private CourierService courierService;
+
+    // другие поля...
+
+    // геттеры и сеттеры
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public CourierService getCourierService() {
+        return courierService;
+    }
+
+    public void setCourierService(CourierService courierService) {
+        this.courierService = courierService;
+    }
+
+    // другие геттеры и сеттеры...
+}
+************
+
+
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "FRONT_DIC_CURIER_SERVICE")
+public class CourierService {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String comment;
+
+    @OneToMany(mappedBy = "courierService")
+    private List<Courier> couriers;
+
+    // геттеры и сеттеры
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public List<Courier> getCouriers() {
+        return couriers;
+    }
+
+    public void setCouriers(List<Courier> couriers) {
+        this.couriers = couriers;
+    }
+}

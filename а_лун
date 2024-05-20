@@ -1,0 +1,9 @@
+ALTER TABLE FRONT_DIC_CURIER
+ADD COLUMN name_key BIGINT;
+
+-- Добавление внешнего ключа, связывающего столбец forgen_key в таблице FRONT_DIC_CURIER
+-- со столбцом id в таблице FRONT_DIC_CURIER_SERVICE
+
+ALTER TABLE FRONT_DIC_CURIER
+ADD CONSTRAINT fk_courier_service
+FOREIGN KEY (name_key ) REFERENCES FRONT_DIC_CURIER_SERVICE(id);
