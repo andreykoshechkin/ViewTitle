@@ -1,0 +1,43 @@
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.PWA;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+@Route("")
+@PWA(name = "Vaadin Redirect Example", shortName = "Redirect Example")
+public class MainView extends VerticalLayout {
+
+    private final WebClient webClient;
+
+    @Autowired
+    public MainView(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+
+        // Создаем кнопку для выполнения POST-запроса и редиректа
+        Button crmButton = new Button("Go to CRM");
+        crmButton.addClickListener(event -> {
+            postAndRedirect();
+        });
+
+        add(crmButton);
+    }
+
+    private void postAndRedirect() {
+        Mono<Void> result = webClient.post()
+                .uri("/api/post-endpoint") // Укажите реальный URI вашего RESTful сервиса
+                .retrieve()
+                .bodyToMono(Void.class);
+
+        result.subscribe(response -> {
+            // Выполнение редиректа после успешного POST-запроса
+            getUI().ifPresent(ui -> ui.getPage().open("https://www.crmexample.com", "_blank"));
+        }, error -> {
+            // Обработка ошибки
+            Notification.show("Failed to perform POST request: " + error.getMessage(), 3000, Notification.Position.MIDDLE);
+        });
+    }
+}
