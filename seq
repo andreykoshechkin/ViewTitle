@@ -1,0 +1,31 @@
+. В аннотации @SequenceGenerator имя генератора (name) может быть любым, но оно должно совпадать с именем генератора в @GeneratedValue. Имя последовательности (sequenceName) должно соответствовать имени последовательности в базе данных Oracle. Вот правильный пример:
+
+У меня есть база данных oracle, там я создал таблицу User и создал sequnce 
+CREATE SEQUENCE MY_EXAMPLE_SEQ
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "MY_EXAMPLE_SEQ", allocationSize = 1)
+    private Long id;
+
+    private String username;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", referencedColumnName = "DRR_id")
+    private Company company;
+
+    // getters and setters
+}
+
+
+
+Но я получаю ошибку
+
+
+@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "любое_имя_генератора")
+    @SequenceGenerator(name = "любое_имя_генератора", sequenceName = "ИМЯ_SEQ_В_БД", allocationSize = 1)
