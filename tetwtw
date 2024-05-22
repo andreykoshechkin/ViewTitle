@@ -1,0 +1,31 @@
+Клиент должен иметь категорию 3 + группу 2.
+У клиента не должно быть категории 922/*, за исключением случая, когда это 922/5.
+Если у клиента есть 922/5 и любые другие 922/*, условие всё равно должно возвращать true.
+Для корректной реализации, нужно следующее:
+
+Проверить наличие категории 3 и группы 2.
+Проверить отсутствие категории 922/*, кроме 922/5.
+Допустить наличие 922/5 даже если есть другие 922/*.
+
+
+public List<AccoutXGGList> testExample(List<AccoutXGGList> accoutXGGLists) {
+    return accoutXGGLists.stream()
+            .filter(it -> it.getClientXXGS().stream()
+                    .anyMatch(kg -> kg.getCategory().equals(BigDecimal.valueOf(3)) && kg.getGroup().equals(BigDecimal.valueOf(2))))
+            .filter(it -> {
+                boolean has922_5 = it.getClientXXGS().stream()
+                        .anyMatch(kg -> kg.getCategory().equals(BigDecimal.valueOf(922)) && kg.getGroup().equals(BigDecimal.valueOf(5)));
+                boolean hasOther922 = it.getClientXXGS().stream()
+                        .anyMatch(kg -> kg.getCategory().equals(BigDecimal.valueOf(922)) && !kg.getGroup().equals(BigDecimal.valueOf(5)));
+                return !hasOther922 || has922_5;
+            })
+            .collect(Collectors.toList());
+}
+
+
+
+Первый фильтр: Проверяет наличие категории 3 и группы 2.
+Второй фильтр:
+has922_5 проверяет наличие категории 922 и группы 5.
+hasOther922 проверяет наличие категории 922 с любой группой, кроме 5.
+return !hasOther922 || has922_5; — условие вернёт true, если нет других 922/, кроме 922/5, или если 922/5 присутствует даже с другими 922/.
