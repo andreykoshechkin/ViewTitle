@@ -9,8 +9,10 @@ public class Main {
 
         AccoutXGGList accoutXGGList = new AccoutXGGList();
         List<ClientXXG> xxgLsit =  new ArrayList<>();
-        xxgLsit.add(new ClientXXG(BigDecimal.valueOf(3), BigDecimal.valueOf(2)));
+        xxgLsit.add(new ClientXXG(BigDecimal.valueOf(3), BigDecimal.valueOf(1)));
         xxgLsit.add(new ClientXXG(BigDecimal.valueOf(922), BigDecimal.valueOf(5)));
+        xxgLsit.add(new ClientXXG(BigDecimal.valueOf(922), BigDecimal.valueOf(6)));
+
 
 
         accoutXGGList.setClientXXGS(xxgLsit);
@@ -19,7 +21,7 @@ public class Main {
 
         List<AccoutXGGList> accoutXGGList1 = List.of(accoutXGGList);
 
-        List<AccoutXGGList> accoutXGGLists = clientService.testExample(accoutXGGList1);
+        List<AccoutXGGList> accoutXGGLists = clientService.testExample3(accoutXGGList1);
         System.out.println(accoutXGGLists);
 
 

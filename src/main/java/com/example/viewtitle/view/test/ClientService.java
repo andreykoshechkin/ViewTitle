@@ -27,4 +27,19 @@ public class ClientService {
                 .filter(it -> it.getClientXXGS().stream().noneMatch(kg -> kg.getCategory().equals(BigDecimal.valueOf(922))))
                 .collect(Collectors.toList());
     }
+
+    public List<AccoutXGGList> testExample3(List<AccoutXGGList> accoutXGGLists) {
+        return accoutXGGLists.stream()
+                .filter(it -> it.getClientXXGS().stream()
+                        .anyMatch(kg -> kg.getCategory().equals(BigDecimal.valueOf(3)) && kg.getGroup().equals(BigDecimal.valueOf(2))))
+                .filter(it -> {
+                    boolean has922_5 = it.getClientXXGS().stream()
+                            .anyMatch(kg -> kg.getCategory().equals(BigDecimal.valueOf(922)) && kg.getGroup().equals(BigDecimal.valueOf(5)));
+                    boolean hasOther922 = it.getClientXXGS().stream()
+                            .anyMatch(kg -> kg.getCategory().equals(BigDecimal.valueOf(922)) && !kg.getGroup().equals(BigDecimal.valueOf(5)));
+                    return !hasOther922 || has922_5;
+                })
+                .collect(Collectors.toList());
+    }
+
 }
