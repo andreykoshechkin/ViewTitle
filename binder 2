@@ -1,0 +1,16 @@
+  binder.forField(lastNum)
+          .withValidator(new CheckForEmpty())
+          .withValidator(new StringLengthValidator("Must be exactly 4 digits", 4, 4))
+          .bind(
+              halvaDetailData -> {
+                  // Извлечение значения из HalvaDetailData и возвращение последних 4 цифр
+                  String cardNum = halvaDetailData.getCardNum();
+                  return cardNum != null && cardNum.length() == 19 ? cardNum.substring(15) : "";
+              },
+              (halvaDetailData, lastFourDigits) -> {
+                  // Установка значения в HalvaDetailData, комбинируя маску и последние 4 цифры
+                  if (lastFourDigits != null && lastFourDigits.length() == 4) {
+                      halvaDetailData.setCardNum("**** **** **** " + lastFourDigits);
+                  }
+              }
+          );
