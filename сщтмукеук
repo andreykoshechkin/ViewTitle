@@ -1,0 +1,19 @@
+private static class CardNumberConverter implements Converter<String, String> {
+        @Override
+        public Result<String> convertToModel(String value, ValueContext context) {
+            if (value == null || value.isEmpty()) {
+                return Result.ok("**** **** ****");
+            } else {
+                return Result.ok("**** **** **** " + value);
+            }
+        }
+
+        @Override
+        public String convertToPresentation(String value, ValueContext context) {
+            if (value != null && value.length() > 4) {
+                return value.substring(value.length() - 4);
+            } else {
+                return value;
+            }
+        }
+    }
