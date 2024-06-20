@@ -1,0 +1,39 @@
+@Route("/app")
+public class CardNumberView extends  HorizontalLayout {
+
+    public CardNumberView() {
+        VerticalLayout layout = new VerticalLayout();
+        TextField cardField = new TextField("Credit Card Number:");
+
+        // Начальное значение
+        cardField.setValue("**** **** **** ");
+
+        // Ограничение длины ввода
+        cardField.setMaxLength(19);
+
+        // Добавление слушателя изменения значения
+        cardField.addValueChangeListener(event -> {
+            String value = event.getValue();
+
+            // Убедиться, что первые 15 символов всегда "**** **** **** "
+            if (!value.startsWith("**** **** **** ")) {
+                value = "**** **** **** ";
+            }
+
+            // Разрешить только цифры после фиксированной части
+            String digits = value.substring(15).replaceAll("[^0-9]", "");
+
+            // Ограничение до последних 4 цифр
+            if (digits.length() > 4) {
+                digits = digits.substring(0, 4);
+            }
+
+            // Обновление значения поля
+            cardField.setValue("**** **** **** " + digits);
+        });
+
+        add(cardField);
+
+    }
+
+}
