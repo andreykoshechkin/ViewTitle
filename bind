@@ -1,0 +1,44 @@
+public class CardNumberComponent extends HorizontalLayout {
+
+    @Getter
+    private TextField maskField;
+    @Getter
+    private TextField lastNum;
+
+    public CardNumberComponent() {
+        maskField = new TextField();
+        maskField.setValue("**** **** ****");
+        maskField.setReadOnly(true);
+
+        lastNum = new TextField();
+        lastNum.setMaxLength(4);
+        lastNum.setWidth("4em");
+
+        lastNum.addValueChangeListener(event -> {
+            String value = event.getValue();
+            StringBuilder filterValue = new StringBuilder();
+
+            for (char c : value.toCharArray()) {
+                if (Character.isDigit(c) && filterValue.length() < 4) {
+                    filterValue.append(c);
+                }
+            }
+
+            if (!value.equals(filterValue.toString())) {
+                lastNum.setValue(filterValue.toString());
+            }
+        });
+
+        add(maskField, lastNum);
+    }
+
+    public String getFullCardNumber() {
+        return maskField.getValue() + " " + lastNum.getValue();
+    }
+
+    public void setFullCardNumber(String fullCardNumber) {
+        if (fullCardNumber != null && fullCardNumber.length() == 19) { // **** **** **** 1234
+            lastNum.setValue(fullCardNumber.substring(15));
+        }
+    }
+}
