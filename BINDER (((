@@ -1,0 +1,54 @@
+@Getter
+private TextField maskField;
+@Getter
+private TextField lastNum;
+
+public CardNumberComponent() {
+    maskField = new TextField();
+    maskField.setValue("**** **** ****");
+    maskField.setReadOnly(true);
+
+    lastNum = new TextField();
+    lastNum.setMaxLength(4);
+    lastNum.setWidth("4em");
+
+    lastNum.addValueChangeListener(event -> {
+        String value = event.getValue();
+        StringBuilder filterValue = new StringBuilder();
+
+        for (char c : value.toCharArray()) {
+            if(Character.isDigit(c) && filterValue.length() < 4){
+                filterValue.append(c);
+            }
+        }
+
+        if(!value.equals(filterValue.toString())){
+            lastNum.setValue(filterValue.toString());
+        }
+    });
+
+    add(maskField, lastNum);
+}
+
+public String getFullCardNumber() {
+    return maskField.getValue().replaceAll("\\s+", "") + " " + lastNum.getValue();
+}
+
+public void setFullCardNumber(String fullCardNumber) {
+    if (fullCardNumber.length() == 19 && fullCardNumber.matches("\\*{4} \\*{4} \\*{4} \\d{4}")) {
+        maskField.setValue(fullCardNumber.substring(0, 15));
+        lastNum.setValue(fullCardNumber.substring(15));
+    }
+}
+Binder<HalvaDetailData> binder = new Binder<>();
+
+binder.forField(cardComponent.getLastNum())
+    .withValidator(new CheckForEmpty())
+    .withValidator(new StringLengthValidator("Must be 4 digits", 4, 4))
+    .bind(
+        HalvaDetailData::getCardNum, // getter
+        (halvaDetailData, cardNum) -> { // setter
+            // Set the full card number including mask to HalvaDetailData
+            halvaDetailData.setCardNum(cardComponent.getFullCardNumber());
+        }
+    );
