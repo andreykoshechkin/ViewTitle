@@ -17,3 +17,50 @@ private static class CardNumberConverter implements Converter<String, String> {
             }
         }
     }
+*******************
+
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.validator.StringLengthValidator;
+
+public class YourFormComponent {
+    private CardNumberComponent cardComponent;
+    private Binder<CardData> binder;
+
+    public YourFormComponent() {
+        cardComponent = new CardNumberComponent();
+        binder = new Binder<>(CardData.class);
+
+        // Bind cardNum to maskField and lastNum
+        binder.forField(cardComponent.getMaskField())
+              .bind(CardData::getCardNum, CardData::setCardNum);
+
+        binder.forField(cardComponent.getLastNum())
+              .withValidator(new StringLengthValidator("Must be 4 characters", 4, 4))
+              .bind(cardData -> getLastFourDigits(cardData.getCardNum()), 
+                    (cardData, lastFourDigits) -> updateCardNum(cardData, lastFourDigits));
+    }
+
+    // Helper method to format the cardNum as required
+    private String getLastFourDigits(String cardNum) {
+        if (cardNum != null && cardNum.length() >= 4) {
+            return "**** **** **** " + cardNum.substring(cardNum.length() - 4);
+        } else {
+            return "**** **** ****";
+        }
+    }
+
+    // Update cardNum based on lastNum input
+    private void updateCardNum(CardData cardData, String lastFourDigits) {
+        if (lastFourDigits != null && lastFourDigits.length() == 4) {
+            cardData.setCardNum(lastFourDigits); // Assuming lastFourDigits is just the last 4 digits
+        }
+    }
+
+    public Binder<CardData> getBinder() {
+        return binder;
+    }
+
+    public CardNumberComponent getCardComponent() {
+        return cardComponent;
+    }
+}
