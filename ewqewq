@@ -1,0 +1,38 @@
+@Route("/app2")
+public class MyUI extends VerticalLayout {
+
+    public MyUI() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+
+        Label label = new Label("Credit Card Number:");
+        TextField cardField = new TextField();
+        cardField.setValue("**** **** **** ");
+        cardField.setMaxLength(19);
+
+        // Add a value change listener to handle input changes
+        cardField.addValueChangeListener(event -> {
+            String value = event.getValue();
+
+            // Ensure the first 15 characters are always "**** **** **** "
+            if (!value.startsWith("**** **** **** ")) {
+                cardField.setValue("**** **** **** ");
+            } else {
+                // Allow only digits after the fixed part
+                String digits = value.substring(15).replaceAll("[^0-9]", "");
+
+                // Limit to the last 4 digits
+                digits = digits.substring(0, Math.min(digits.length(), 4));
+
+                // Update the input value
+                String newValue = "**** **** **** " + digits;
+                cardField.setValue(newValue);
+             //   cardField.setCursorPosition(newValue.length()); // Maintain cursor position
+            }
+        });
+
+
+        add(label, cardField);
+    }
+
+}
