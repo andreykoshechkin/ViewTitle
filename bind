@@ -41,4 +41,45 @@ public class CardNumberComponent extends HorizontalLayout {
             lastNum.setValue(fullCardNumber.substring(15));
         }
     }
+
 }
+
+Теперь настроим Binder:
+
+java
+Копировать код
+Binder<HalvaDetailData> binder = new Binder<>(HalvaDetailData.class);
+
+CardNumberComponent cardComponent = new CardNumberComponent();
+
+binder.forField(cardComponent.getLastNum())
+    .withValidator(new CheckForEmpty())
+    .withValidator(new StringLengthValidator("Must be exactly 4 digits", 4, 4))
+    .bind(
+        item -> cardComponent.getFullCardNumber(),
+        (item, value) -> {
+            cardComponent.setFullCardNumber(value);
+            item.setCardNum(value);
+        }
+    );
+
+// Пример использования
+HalvaDetailData halvaDetailData = new HalvaDetailData();
+binder.setBean(halvaDetailData);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
