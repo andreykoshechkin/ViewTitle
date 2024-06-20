@@ -1,0 +1,15 @@
+public class StringToCardNumConverter implements Converter<String, String> {
+
+    @Override
+    public Result<String> convertToModel(String fieldValue, ValueContext context) {
+        // Преобразование строки fieldValue (например, "3213") в нужный формат "**** **** **** 3213"
+        String formattedCardNum = "**** **** **** " + fieldValue;
+        return Result.ok(formattedCardNum);
+    }
+
+    @Override
+    public String convertToPresentation(String cardNumValue, ValueContext context) {
+        // Обратное преобразование от формата "**** **** **** 3213" к "3213" для отображения
+        return cardNumValue.substring(cardNumValue.length() - 4);
+    }
+}
