@@ -1,0 +1,18 @@
+     // Set up Binder to bind cardNum
+        Binder<CardData> binder = new Binder<>();
+        binder.forField(lastNum)
+                .withValidator(new StringLengthValidator("Must be exactly 4 characters", 4, 4))
+                .bind(cardData -> lastNum.getValue(), (cardData, newValue) -> updateCardNum());
+
+        add(maskField, lastNum);
+    }
+
+    private void updateCardNum() {
+        // Concatenate maskField value and lastNum value to form cardNum
+        String cardNum = maskField.getValue().replace(" ", "") + " " + lastNum.getValue();
+        // Set the concatenated value to CardData object
+        binder.getBean().setCardNum(cardNum);
+    }
+
+    // Additional methods and properties as needed
+}
