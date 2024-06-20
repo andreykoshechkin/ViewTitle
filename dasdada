@@ -1,0 +1,45 @@
+
+@Route("/app2")
+public class MyUI extends VerticalLayout {
+
+    public MyUI() {
+        Label label = new Label("Номер кредитной карты:");
+        TextField cardField = new TextField();
+        cardField.setValue("**** **** **** "); // Устанавливаем начальное значение с замаскированным номером карты
+        cardField.setMaxLength(19); // Устанавливаем максимальную длину поля
+
+// Добавляем слушатель изменений значения поля
+        cardField.addValueChangeListener(event -> {
+            String value = event.getValue();
+
+            // Убеждаемся, что первые 15 символов всегда равны "**** **** **** "
+            if (!value.startsWith("**** **** **** ")) {
+                cardField.setValue("**** **** **** "); // Если не соответствует формату, возвращаем исходное значение
+            } else {
+                // Разрешаем вводить только цифры после статической части
+                String digits = value.substring(15).replaceAll("[^0-9]", "");
+
+                // Ограничиваем ввод до последних 4 цифр
+                digits = digits.substring(0, Math.min(digits.length(), 4));
+
+                // Обновляем значение поля ввода
+                String newValue = "**** **** **** " + digits;
+                cardField.setValue(newValue);
+            }
+        });
+
+// Отключаем возможность редактирования первых 15 символов
+        cardField.setEnabled(false);
+
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(true);
+        layout.add(label, cardField);
+
+// Опционально: включить редактирование для последних 4 цифр
+  cardField.setEnabled(true);
+// cardField.setCursorPosition("**** **** **** ".length() + digits.length()); // Устанавливаем позицию курсора после статической части
+
+        add(layout);
+    }
+
+}
