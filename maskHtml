@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credit Card Input</title>
+  <style>
+    .card-input {
+      font-family: monospace;
+      font-size: 16px;
+      letter-spacing: 1px;
+      width: 240px;
+    }
+  </style>
+</head>
+<body>
+<label for="card">Credit Card Number:</label>
+<input type="text" id="card" class="card-input" value="**** **** **** " oninput="updateCardInput(this)" maxlength="19">
+
+<script>
+  function updateCardInput(input) {
+    let value = input.value;
+
+    // Ensure the first 15 characters are always "**** **** **** "
+    if (!value.startsWith("**** **** **** ")) {
+      value = "**** **** **** ";
+    }
+
+    // Allow only digits after the fixed part
+    let digits = value.substring(15).replace(/[^0-9]/g, '');
+
+    // Limit to the last 4 digits
+    digits = digits.substring(0, 4);
+
+    // Update the input value
+    input.value = "**** **** **** " + digits;
+  }
+</script>
+</body>
+</html>
