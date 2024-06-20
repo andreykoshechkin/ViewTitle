@@ -1,3 +1,22 @@
+public class LastDigitsConverter implements Converter<String, String> {
+
+    @Override
+    public Result<String> convertToModel(String value, ValueContext context) {
+        // Convert lastNum value to full cardNum with masked part
+        // Example implementation:
+        String maskedPart = "**** **** ****";
+        String fullCardNum = maskedPart.substring(0, 15) + value;
+        return Result.ok(fullCardNum);
+    }
+
+    @Override
+    public String convertToPresentation(String value, ValueContext context) {
+        // Convert cardNum value to lastNum for presentation
+        // Example implementation:
+        return value.substring(15);
+    }
+}
+***********************************
 private static class CardNumberConverter implements Converter<String, String> {
         @Override
         public Result<String> convertToModel(String value, ValueContext context) {
