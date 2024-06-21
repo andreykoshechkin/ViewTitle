@@ -1,0 +1,73 @@
+@Getter
+public class CardNumberComponent extends CustomField<String> {
+
+    private TextField maskField;
+    private TextField lastNum;
+
+    public CardNumberComponent() {
+
+        maskField = new TextField();
+        maskField.setValue("**** **** ****");
+        maskField.setReadOnly(true);
+
+        lastNum = new TextField();
+        lastNum.setMaxLength(4);
+        lastNum.setWidth("4em");
+
+        lastNum.addValueChangeListener(event -> {
+            String value = event.getValue();
+            StringBuilder filterValue = new StringBuilder();
+
+            for (char c : value.toCharArray()) {
+                if (Character.isDigit(c) && filterValue.length() < 4) {
+                    filterValue.append(c);
+                }
+            }
+
+            if (!value.equals(filterValue.toString())) {
+                lastNum.setValue(filterValue.toString());
+            } else {
+
+                //setModelValue(filterValue.toString(), true);  // Уведомляем о новом значении
+            }
+        });
+
+        add(maskField, lastNum);
+    }
+
+    private void updateMaskedValue(String value) {
+        StringBuilder maskedValue = new StringBuilder("**** **** **** ");
+        if (value != null && !value.isEmpty()) {
+            maskedValue.append(value);
+        }
+        maskField.setValue(maskedValue.toString());
+    }
+
+    @Override
+    protected String generateModelValue() {
+        return lastNum.getValue();
+    }
+
+    @Override
+    protected void setPresentationValue(String newPresentationValue) {
+        if (newPresentationValue != null) {
+            lastNum.setValue(newPresentationValue);
+            //updateMaskedValue(newPresentationValue);
+        } else {
+            lastNum.clear();
+            maskField.setValue("**** **** **** ");
+        }
+    }
+
+    @Override
+    public String getValue() {
+        return maskField.getValue() + lastNum.getValue();
+    }
+
+    @Override
+    protected void setModelValue(String newModelValue, boolean fromClient) {
+        lastNum.setValue(newModelValue);
+      //  updateMaskedValue(newModelValue);
+    }
+
+}
